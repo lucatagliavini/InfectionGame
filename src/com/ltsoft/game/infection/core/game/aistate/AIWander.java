@@ -6,13 +6,14 @@ import com.ltsoft.game.infection.core.game.entity.NpcObject;
 import com.ltsoft.game.infection.core.inputs.controller.NpcController;
 import com.ltsoft.game.infection.core.states.GameState;
 import com.ltsoft.game.infection.core.utils.Position;
+import com.ltsoft.game.infection.core.utils.math.Vector2f;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AIWander extends AIState {
 
-    private List<Position> targets;
+    private List<Vector2f> targets;
 
     public AIWander() {
         super();
@@ -25,9 +26,9 @@ public class AIWander extends AIState {
             this.targets.add( gameState.getRandomPosition() );
         }
 
-        Position target = this.targets.get(0);
+        Vector2f targetPosition = this.targets.get(0);
         NpcController controller = (NpcController) npcObject.getController();
-        controller.moveToTarget( npcObject.getPosition(), target );
+        controller.moveToTarget( npcObject.getPosition(), targetPosition );
 
         if( this.isArrived( npcObject ) ) {
             controller.stop();
@@ -40,8 +41,8 @@ public class AIWander extends AIState {
     }
 
     private boolean isArrived(NpcObject npcObject) {
-        Position targetPosition = this.targets.get(0);
-        Position npcPosition = npcObject.getPosition();
-        return npcPosition.isInRangeOf( targetPosition, Position.PROXYMITY_RANGE + 10.0 );
+        Vector2f currentPosition = npcObject.getPosition();
+        Vector2f targetPosition = this.targets.get(0);
+        return Position.isInRangeOf( currentPosition, targetPosition, Position.PROXYMITY_RANGE + 10.0 );
     }
 }

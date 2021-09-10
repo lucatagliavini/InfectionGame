@@ -13,15 +13,17 @@ import com.ltsoft.game.infection.core.states.GameState;
 import com.ltsoft.game.infection.core.utils.Direction;
 import com.ltsoft.game.infection.core.utils.Motion;
 
+import java.util.function.Function;
+
 public class NpcObject extends MovingObject {
 
     private AIManager npcManager;
 
-    public NpcObject() {
-        super(new NpcController());
+    public NpcObject(String mObjectName) {
+        super(mObjectName, new NpcController());
         this.npcManager = new AIManager();
 
-        this.motion = new Motion(2.0);
+        this.motion = new Motion(2.0f);
         this.direction = Direction.S;
         this.animationManager = new AnimationManager(
                 SpriteLibrary.getUnit("dave"),
@@ -31,7 +33,7 @@ public class NpcObject extends MovingObject {
     }
 
     @Override
-    public void onUpdate(GameState gameState, double deltaTime) {
+    public void onUpdate(GameState gameState, float deltaTime) {
         super.onUpdate(gameState, deltaTime);
         this.npcManager.onUpdate(gameState, this, deltaTime);
     }

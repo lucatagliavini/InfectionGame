@@ -33,7 +33,7 @@ public class GameContainer {
         this.gameState = new PlayState(this.display.getDisplaySize(), this.input);
     }
 
-    public void onUpdate(double deltaTime) {
+    public void onUpdate(float deltaTime) {
         this.gameState.onUpdate(deltaTime);
     }
 

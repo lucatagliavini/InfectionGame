@@ -9,13 +9,13 @@ public class GameLoop implements Runnable {
     private Thread thread;
     private volatile boolean isRunning;
 
-    private final double upsRate = 60.0d;
-    private final double updateRate = 1.0d / upsRate;
-    private final double nanoToSeconds = 1.0d / 1e9d;
+    private final float upsRate = 60.0f;
+    private final float updateRate = 1.0f / upsRate;
+    private final float nanoToSeconds = 1.0f / 1e9f;
 
     // Gestione statistiche:
     private boolean statsEnabled = true;
-    private final double statsTime = 1.0d; // Ogni secondo
+    private final float statsTime = 1.0f; // Ogni secondo
     private double elapsedStatsTime;
     private int fpsCount, upsCount;
 
@@ -42,11 +42,11 @@ public class GameLoop implements Runnable {
         this.isRunning = true;
         this.fpsCount = 0;
         this.upsCount = 0;
-        this.elapsedStatsTime = 0.0d;
+        this.elapsedStatsTime = 0.0f;
 
         // Contatori per il loop:
-        double accumulatedTime = 0.0d;
-        double elapsedTime = 0.0d;
+        float accumulatedTime = 0.0f;
+        float elapsedTime = 0.0f;
         long currTime, lastTime = System.nanoTime();
         boolean mustRender = false;
         // Inizializzazione:

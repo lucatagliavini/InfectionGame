@@ -2,6 +2,7 @@ package com.ltsoft.game.infection.core.collisions;
 
 import com.ltsoft.game.infection.core.utils.Position;
 import com.ltsoft.game.infection.core.utils.Size;
+import com.ltsoft.game.infection.core.utils.math.Vector2f;
 
 import java.awt.*;
 
@@ -29,12 +30,12 @@ public class CollisionBox {
         return new CollisionBox(this);
     }
 
-    public void setSize(Size size) {
-        this.bounds.setSize( size.getWidth(), size.getHeight() );
+    public void setSize(Vector2f size) {
+        this.bounds.setSize( (int)size.x, (int)size.y );
     }
 
-    public void setLocation(Position position) {
-        this.bounds.setLocation( position.getX(), position.getY() );
+    public void setLocation(Vector2f position) {
+        this.bounds.setLocation( (int)position.x, (int)position.y );
     }
 
     public Rectangle getBounds() {

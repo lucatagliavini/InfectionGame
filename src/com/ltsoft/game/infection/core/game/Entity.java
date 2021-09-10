@@ -1,4 +1,6 @@
-package com.ltsoft.game.infection.core.game.entity;
+package com.ltsoft.game.infection.core.game;
+
+import com.ltsoft.game.infection.core.game.components.EntityComponent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,7 +12,7 @@ public class Entity {
     private String mEntityName;
 
     // Lista dei componenti della entity:
-    private List<Component> mComponentList;
+    private List<EntityComponent> mComponentList;
 
 
     /** Creazione di una entity vuota. */
@@ -21,16 +23,17 @@ public class Entity {
 
 
     /** Aggiungo un componente alla entity. */
-    public void addComponent(Component c) {
+    public void addComponent(EntityComponent c) {
+        c.gameObject = this;
         this.mComponentList.add( c );
     }
 
 
     /** Prelevo un componente castandolo. */
-    public <T extends Component> T getComponent(Class<T> componentClass) {
-        Iterator<Component> componentIterator = this.mComponentList.iterator();
+    public <T extends EntityComponent> T getComponent(Class<T> componentClass) {
+        Iterator<EntityComponent> componentIterator = this.mComponentList.iterator();
         while(componentIterator.hasNext()) {
-            Component component = componentIterator.next();
+            EntityComponent component = componentIterator.next();
             if( component.getClass().isAssignableFrom( componentClass ) ) {
                 return componentClass.cast( component );
             }

@@ -1,56 +1,61 @@
 package com.ltsoft.game.infection.core.game;
 
 import com.ltsoft.game.infection.core.collisions.CollisionBox;
+import com.ltsoft.game.infection.core.game.components.PositionComponent;
+import com.ltsoft.game.infection.core.game.components.SizeComponent;
 import com.ltsoft.game.infection.core.states.GameState;
 import com.ltsoft.game.infection.core.utils.Position;
 import com.ltsoft.game.infection.core.utils.Size;
+import com.ltsoft.game.infection.core.utils.math.Vector2f;
 
 import java.awt.image.BufferedImage;
 
-public abstract class GameObject {
-
-    protected Position position;
-    protected Size size;
+public abstract class GameObject extends Entity {
 
     protected CollisionBox collisionBox;
-    protected Position collisionBoxOffset;
-    protected Size collisionBoxSize;
+    protected Vector2f collisionBoxOffset;
+    protected Vector2f collisionBoxSize;
 
-    public GameObject() {
-        this.position = new Position(50.0, 50.0);
-        this.size = new Size(64.0, 64.0);
+    public GameObject(String mObjectName) {
+        super(mObjectName);
 
-        this.collisionBoxOffset = new Position( 0.0, 0.0 );
+        this.addComponent(new PositionComponent(50.0f, 50.0f));
+        this.addComponent(new SizeComponent(64.0f, 64.0f));
+
+        this.collisionBoxOffset = new Vector2f( 0.0f, 0.0f );
         this.collisionBox = new CollisionBox();
 
-        this.collisionBoxSize = new Size( 16, 24 );
-        this.collisionBoxOffset.setPosition( 24.0, 32.0 );
+        this.collisionBoxSize = new Vector2f( 16f, 24f );
+        this.collisionBoxOffset.set( 24.0f, 32.0f );
         this.collisionBox.setSize( this.collisionBoxSize );
 
-        this.collisionBox.setLocation( this.position );
+        // Controllo compatibilità:
+        Vector2f position = this.getComponent(PositionComponent.class).getPosition();
+        this.collisionBox.setLocation( position );
     }
 
-    public abstract void onUpdate(GameState gameState, double deltaTime);
+    public abstract void onUpdate(GameState gameState, float deltaTime);
 
     public abstract BufferedImage getSprite();
 
     /** TODO: Capire se questo va sempre bene o meno, sempre prima posizione
      * poi update collision box, o questa cosa non va bene ?
      */
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setPosition(Vector2f position) {
+        PositionComponent positionComp = this.getComponent(PositionComponent.class);
+        positionComp.setPosition( position );
 
-        Position currentBoxPosition = new Position( this.position );
-        currentBoxPosition.addOffset( this.collisionBoxOffset.getPosition() );
+        Vector2f currentBoxPosition = new Vector2f( position );
+        currentBoxPosition = currentBoxPosition.add( this.collisionBoxOffset );
         this.collisionBox.setLocation( currentBoxPosition );
     }
 
-    public Position getPosition() {
-        return this.position;
+    public Vector2f getPosition() {
+        return this.getComponent(PositionComponent.class).getPosition();
     }
 
-    public Size getSize() {
-        return this.size;
+    public Vector2f getSize() {
+        return this.getComponent(SizeComponent.class).getSize();
     }
 
     public boolean collidingWith(GameObject otherObject) {

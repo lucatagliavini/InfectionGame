@@ -62,7 +62,7 @@ public class Renderer {
                 .filter( gameObject -> camera.isInView(gameObject))
                 // Disegnamo gli oggetti:
                 .forEach(
-    gameObject -> g2d.drawImage( gameObject.getSprite(), gameObject.getPosition().getX(), gameObject.getPosition().getY(), null )
+    gameObject -> g2d.drawImage( gameObject.getSprite(), (int)gameObject.getPosition().x, (int)gameObject.getPosition().y, null )
         );
 
         // Restore:

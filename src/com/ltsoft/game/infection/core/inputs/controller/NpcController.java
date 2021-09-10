@@ -1,6 +1,7 @@
 package com.ltsoft.game.infection.core.inputs.controller;
 
 import com.ltsoft.game.infection.core.utils.Position;
+import com.ltsoft.game.infection.core.utils.math.Vector2f;
 
 public class NpcController implements Controller {
 
@@ -40,9 +41,9 @@ public class NpcController implements Controller {
         this.RIGHT = false;
     }
 
-    public void moveToTarget(Position currentPosition, Position targetPosition) {
-        double dx = targetPosition.getPosition().x - currentPosition.getPosition().x;
-        double dy = targetPosition.getPosition().y - currentPosition.getPosition().y;
+    public void moveToTarget(Vector2f currentPosition, Vector2f targetPosition) {
+        double dx = targetPosition.x - currentPosition.x;
+        double dy = targetPosition.y - currentPosition.y;
 
         this.UP = (dy < 0) && Math.abs( dy ) > Position.PROXYMITY_RANGE;
         this.RIGHT = (dx > 0) && Math.abs( dx ) > Position.PROXYMITY_RANGE;

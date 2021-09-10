@@ -35,9 +35,9 @@ public class Position {
         this.pos = this.pos.add( movement );
     }
 
-    public boolean isInRangeOf(Position target, double range) {
-        double dx = this.pos.x - target.getPosition().x;
-        double dy = this.pos.y - target.getPosition().y;
+    public static boolean isInRangeOf(Vector2f currentPos, Vector2f targetPos, double range) {
+        double dx = currentPos.x - targetPos.x;
+        double dy = currentPos.y - targetPos.y;
         return Math.sqrt( dx * dx + dy * dy ) < range;
     }
 

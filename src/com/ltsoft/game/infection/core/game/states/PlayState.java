@@ -10,6 +10,7 @@ import com.ltsoft.game.infection.core.inputs.controller.PlayerController;
 import com.ltsoft.game.infection.core.states.GameState;
 import com.ltsoft.game.infection.core.utils.Position;
 import com.ltsoft.game.infection.core.utils.Size;
+import com.ltsoft.game.infection.core.utils.math.Vector2f;
 import com.ltsoft.game.infection.core.world.Tile;
 import com.ltsoft.game.infection.core.world.TiledMap;
 
@@ -35,10 +36,10 @@ public class PlayState extends GameState {
 
     public void initializeNPCS(int number) {
         for(int i=0; i<number; i++) {
-            NpcObject npc = new NpcObject();
+            NpcObject npc = new NpcObject("Npc_" + i);
 
-            Position randomPosition = this.getRandomPosition();
-            npc.setPosition(new Position( randomPosition.getPosition().x, randomPosition.getPosition().y ));
+            Vector2f randomPosition = this.getRandomPosition();
+            npc.setPosition( randomPosition );
             npc.setAction(new Cough());
             this.gameObjectList.add( npc );
         }

@@ -6,37 +6,37 @@ import com.ltsoft.game.infection.core.utils.math.Vector2f;
 public class Motion {
 
     private Vector2f direction;
-    private double speed;
-    private double multiplier;
+    private float speed;
+    private float multiplier;
 
 
-    public Motion(double speed) {
+    public Motion(float speed) {
         this.speed = speed;
         this.direction = new Vector2f();
-        this.multiplier = 1.0;
+        this.multiplier = 1.0f;
     }
 
-    public void onUpdate(Controller controller, double deltaTime) {
+    public void onUpdate(Controller controller, float deltaTime) {
         float deltaX = 0.0f;
         float deltaY = 0.0f;
         if( controller.isRequestingUp() ) {
-            deltaY += -1.0;
+            deltaY += -1.0f;
         }
         if( controller.isRequestingDown() ) {
-            deltaY += 1.0;
+            deltaY += 1.0f;
         }
         if( controller.isRequestingLeft() ) {
-            deltaX += -1.0;
+            deltaX += -1.0f;
         }
         if( controller.isRequestingRight() ) {
-            deltaX += 1.0;
+            deltaX += 1.0f;
         }
 
         this.direction = this.direction.set(deltaX, deltaY);
         this.direction = this.direction.normalize();
     }
 
-    public void multiply(double multiplier) {
+    public void multiply(float multiplier) {
         this.multiplier = multiplier;
     }
 
@@ -48,7 +48,7 @@ public class Motion {
         return this.direction;
     }
 
-    public double getSpeed() {
+    public float getSpeed() {
         return this.speed;
     }
 

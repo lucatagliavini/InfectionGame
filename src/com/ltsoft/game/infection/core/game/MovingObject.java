@@ -1,6 +1,7 @@
 package com.ltsoft.game.infection.core.game;
 
 import com.ltsoft.game.infection.core.collisions.CollisionBox;
+import com.ltsoft.game.infection.core.game.components.PositionComponent;
 import com.ltsoft.game.infection.core.game.entity.actions.Action;
 import com.ltsoft.game.infection.core.game.entity.effects.Effect;
 import com.ltsoft.game.infection.core.graphics.animations.AnimationManager;
@@ -11,6 +12,7 @@ import com.ltsoft.game.infection.core.states.GameState;
 import com.ltsoft.game.infection.core.utils.Direction;
 import com.ltsoft.game.infection.core.utils.Motion;
 import com.ltsoft.game.infection.core.utils.Position;
+import com.ltsoft.game.infection.core.utils.math.Vector2f;
 
 import javax.swing.text.html.Option;
 import java.awt.image.BufferedImage;
@@ -30,10 +32,10 @@ public abstract class MovingObject extends GameObject {
     protected List<Effect> effectList;
     protected Optional<Action> currentAction;
 
-    public MovingObject(Controller controller) {
-        super();
+    public MovingObject(String mObjectName, Controller controller) {
+        super(mObjectName);
         this.controller = controller;
-        this.motion = new Motion(2.0);
+        this.motion = new Motion(2.0f);
         this.direction = Direction.S;
 
         this.effectList = new ArrayList<>();
@@ -47,7 +49,7 @@ public abstract class MovingObject extends GameObject {
     }
 
     @Override
-    public void onUpdate(GameState gameState, double deltaTime) {
+    public void onUpdate(GameState gameState, float deltaTime) {
         this.handleAction(gameState, deltaTime);
         this.handleMotion(deltaTime);
 
@@ -61,9 +63,11 @@ public abstract class MovingObject extends GameObject {
         this.effectList.forEach( effect -> effect.onUpdate(gameState, this, deltaTime) );
 
         // Muoviamo alla fine:
-        this.position.apply(this.motion.getVector());
+        PositionComponent positionComponent = this.getComponent(PositionComponent.class);
+        Vector2f position = positionComponent.getPosition();
+        position = position.add( this.motion.getVector() );
         // Aggiorniamo il collision BOX:
-        this.setPosition( this.position );
+        this.setPosition( position );
 
         // Cleanup:
         this.onCleanup();
@@ -77,11 +81,12 @@ public abstract class MovingObject extends GameObject {
     }
 
     public CollisionBox getCollisionBox() {
-        Position positionWithMotion = this.position.copy();
-        positionWithMotion.apply( this.motion.getVector() );
+        Vector2f position = this.getComponent(PositionComponent.class).getPosition();
+        Vector2f positionWithMotion = Vector2f.valueOf( position );
 
+        // La Location del Collision Box deve tenere conto dell'OFFSET!!!
         CollisionBox movedCollisionBox = this.collisionBox.copy();
-        movedCollisionBox.setLocation( positionWithMotion );
+        movedCollisionBox.setLocation( positionWithMotion.add( this.collisionBoxOffset ));
         return movedCollisionBox;
     }
 
@@ -131,7 +136,7 @@ public abstract class MovingObject extends GameObject {
     }
 
     /** Gestione movimento. */
-    private void handleMotion(double deltaTime) {
+    private void handleMotion(float deltaTime) {
         // Non gestiamo movimento con azione in corso:
         if( this.currentAction.isPresent() ) {
             this.motion.stop();
@@ -151,7 +156,7 @@ public abstract class MovingObject extends GameObject {
         }
     }
 
-    public void setSpeedMultiplier(double speedMultiplier) {
+    public void setSpeedMultiplier(float speedMultiplier) {
         this.motion.multiply( speedMultiplier );
     }
 

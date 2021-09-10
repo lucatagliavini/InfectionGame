@@ -24,7 +24,8 @@ public class ImageUtils {
             BufferedImage loaded = ImageIO.read(Objects.requireNonNull(ImageUtils.class.getResource(filePath)));
 
             // Converto immagine in formato noto:
-            BufferedImage converted = ImageUtils.createCompatibleImage(loaded.getWidth(), loaded.getHeight(), loaded.getTransparency());
+            BufferedImage converted = ImageUtils.createCompatibleImage(
+                    loaded.getWidth(), loaded.getHeight(), loaded.getTransparency());
             Graphics2D g2d = converted.createGraphics();
             g2d.drawImage(loaded, 0, 0, null);
             g2d.dispose();

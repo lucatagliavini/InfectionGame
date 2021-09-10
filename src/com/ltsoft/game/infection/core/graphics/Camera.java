@@ -1,6 +1,7 @@
 package com.ltsoft.game.infection.core.graphics;
 
 import com.ltsoft.game.infection.core.game.GameObject;
+import com.ltsoft.game.infection.core.game.components.PositionComponent;
 import com.ltsoft.game.infection.core.states.GameState;
 import com.ltsoft.game.infection.core.utils.Position;
 import com.ltsoft.game.infection.core.utils.Size;
@@ -35,12 +36,12 @@ public class Camera {
 
     public void onUpdate(GameState state, double deltaTime) {
         if( this.objectWithFocus.isPresent() ) {
-            Position objectPosition = this.objectWithFocus.get().getPosition();
-            Size objectSize = this.objectWithFocus.get().getSize();
+            Vector2f objectPosition = this.objectWithFocus.get().getPosition();
+            Vector2f objectSize = this.objectWithFocus.get().getSize();
 
             // CENTER:
-            float cameraX = objectPosition.getPosition().x - (this.windowSize.getWidth() - objectSize.getWidth())/2.0f;
-            float cameraY = objectPosition.getPosition().y - (this.windowSize.getHeight() - objectSize.getHeight())/2.0f;
+            float cameraX = objectPosition.x - (this.windowSize.getWidth() - objectSize.x)/2.0f;
+            float cameraY = objectPosition.y - (this.windowSize.getHeight() - objectSize.y)/2.0f;
 
             this.position.setPosition(cameraX, cameraY);
         }
@@ -67,8 +68,8 @@ public class Camera {
     /** Check se l'oggetto è in view della camera. */
     public boolean isInView(GameObject gameObject) {
         Rectangle objectRectangle = new Rectangle();
-        objectRectangle.setLocation( gameObject.getPosition().getX(), gameObject.getPosition().getY() );
-        objectRectangle.setSize( gameObject.getSize().getWidth(), gameObject.getSize().getHeight() );
+        objectRectangle.setLocation( (int)gameObject.getPosition().x, (int)gameObject.getPosition().y );
+        objectRectangle.setSize( (int)gameObject.getSize().x, (int)gameObject.getSize().y );
 
         return this.isInView( objectRectangle );
     }

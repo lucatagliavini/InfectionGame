@@ -14,14 +14,14 @@ public class PlayerObject extends MovingObject {
 
 
     public PlayerObject(Controller controller) {
-        super(controller);
+        super("Player", controller);
         this.animationManager.setAnimation("stand");
         // Effetto di SpeedBoost:
         //this.effectList.add(new Caffeinated());
     }
 
     @Override
-    public void onUpdate(GameState gameState, double deltaTime) {
+    public void onUpdate(GameState gameState, float deltaTime) {
         super.onUpdate(gameState, deltaTime);
     }
 

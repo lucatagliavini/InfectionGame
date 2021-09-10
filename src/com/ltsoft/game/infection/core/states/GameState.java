@@ -6,11 +6,10 @@ import com.ltsoft.game.infection.core.graphics.images.SpriteLibrary;
 import com.ltsoft.game.infection.core.inputs.Input;
 import com.ltsoft.game.infection.core.utils.Position;
 import com.ltsoft.game.infection.core.utils.Size;
+import com.ltsoft.game.infection.core.utils.math.Vector2f;
 import com.ltsoft.game.infection.core.world.TiledMap;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class GameState {
@@ -19,6 +18,7 @@ public abstract class GameState {
     protected TiledMap tiledMap;
 
     // Concetti dello stato:
+    protected Map<String, List<GameObject>> mGameObjectsMap;
     protected List<GameObject> gameObjectList;
     protected Input input;
 
@@ -29,12 +29,33 @@ public abstract class GameState {
     public GameState(Size windowSize, Input input) {
         this.input = input;
         this.gameObjectList = new ArrayList<>();
+        this.mGameObjectsMap = new HashMap<>();
         this.camera = new Camera(windowSize);
         // Inizializzazione:
         SpriteLibrary.loadSprites();
         this.onInit();
     }
 
+
+    /** Aggiungiamo un Game Object. */
+    public void addGameObject(GameObject gameObject) {
+        String mObjectName = gameObject.getName();
+        List<GameObject> otherObjects = this.mGameObjectsMap.get( mObjectName );
+        if( otherObjects == null ) {
+            otherObjects = new ArrayList<>();
+            this.mGameObjectsMap.put( mObjectName, otherObjects );
+        }
+        otherObjects.add( gameObject );
+
+        // Aggiungo all'array:
+        this.gameObjectList.add( gameObject );
+    }
+
+
+    /** Prelevo l'oggetto dal nome. */
+    public List<GameObject> getObjectsByName(String mObjectName) {
+        return this.mGameObjectsMap.get( mObjectName );
+    }
 
     /** Inizializzazione. */
     public void onInit() {
@@ -46,7 +67,7 @@ public abstract class GameState {
     }
 
 
-    public void onUpdate(double deltaTime) {
+    public void onUpdate(float deltaTime) {
         // Aggiorniamo tutti i game objects:
         this.gameObjectList.forEach( gameObject -> gameObject.onUpdate(this, deltaTime) );
         this.sortObjectsByPosition();
@@ -58,7 +79,7 @@ public abstract class GameState {
     /** Applichiamo il Y-Ordering: */
     private void sortObjectsByPosition() {
         this.gameObjectList.sort(
-                Comparator.comparing( gameObject -> gameObject.getPosition().getPosition().y)
+                Comparator.comparing( gameObject -> gameObject.getPosition().y)
         );
     }
 
@@ -76,10 +97,10 @@ public abstract class GameState {
     }
 
 
-    public Position getRandomPosition() {
-        float x = Math.random() * this.tiledMap.getMapWitdh();
-        float y = Math.random() * this.tiledMap.getMapHeight();
-        return new Position(x, y);
+    public Vector2f getRandomPosition() {
+        float x = (float)Math.random() * (float)this.tiledMap.getMapWitdh();
+        float y = (float)Math.random() * (float)this.tiledMap.getMapHeight();
+        return new Vector2f(x, y);
     }
 
 

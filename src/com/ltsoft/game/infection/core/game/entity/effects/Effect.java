@@ -15,7 +15,7 @@ public abstract class Effect {
         this.isFinished = false;
     }
 
-    public void onUpdate(GameState gameState, MovingObject movingObject, double deltaTime) {
+    public void onUpdate(GameState gameState, MovingObject movingObject, float deltaTime) {
         this.fCurrentDuration -= deltaTime;
         if( this.fCurrentDuration <= 0.0 ) {
             this.isFinished = true;
